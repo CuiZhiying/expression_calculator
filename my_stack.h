@@ -28,13 +28,13 @@
 #define Underflow (-2)
 #define Overflow  2
 */
-
-typedef struct Stack{} Stack;
+struct Stack;
+typedef struct Stack Stack;
 
 Stack * create_stack( int stack_size );
 Status pop( Stack *stack, float *elem );
 Status push( Stack *stack, float elem );
-Status push( Stack *stack, float elem );
+//Status push( Stack *stack, float elem );
 Status print_stack_num( Stack *stack );
 Status print_stack_char( Stack *stack );
 
