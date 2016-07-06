@@ -20,16 +20,17 @@
 #define MY_STACK_H_
 
 #include "def.h"
-/*
-#define Status    int
-#define OK        1
-#define Error     0
-#define Empty     (-1)
-#define Underflow (-2)
-#define Overflow  2
-*/
-struct Stack;
-typedef struct Stack Stack;
+
+//struct Stack;
+//typedef struct Stack Stack;
+
+typedef struct Stack
+{
+    float *base;
+    int   top;               //Ö¸ÏòÕ»¶¥ÔªËØ¶ø·ÇÕ»¶¥µÄµÚÒ»¸ö¿ÕÔªËØ
+    int   stack_size;
+}Stack;
+
 
 Stack * create_stack( int stack_size );
 Status pop( Stack *stack, float *elem );
@@ -37,5 +38,7 @@ Status push( Stack *stack, float elem );
 //Status push( Stack *stack, float elem );
 Status print_stack_num( Stack *stack );
 Status print_stack_char( Stack *stack );
+int stack_top( Stack *stack );
+Status reset_stack( Stack *stack );
 
 #endif

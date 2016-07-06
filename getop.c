@@ -37,7 +37,7 @@ int getch( void )
 void ungetch( int c )
 {
 	if( bufp >= BUFSIZE )
-		printf( " ungetch: too many characters\n");
+		printf( "ungetch: too many characters\n");
 	else
 		buf[ bufp++ ] = c;
 }

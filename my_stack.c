@@ -12,12 +12,14 @@
 #define Underflow (-4)
 */
 
+/*
 typedef struct Stack
 {
     float *base;
     int   top;               //指向栈顶元素而非栈顶的第一个空元素
     int   stack_size;
 }Stack;
+*/
 
 Stack * create_stack( int stack_size )
 {
@@ -47,14 +49,14 @@ Status push( Stack *stack, float elem )
 {
     if( stack->top >= ( stack->stack_size - 1) )
         return Overflow;
-    stack->base[++stack->top] = elem;
+    stack->base[++(stack->top)] = elem;
     return OK;
 }
 
 Status print_stack_num( Stack *stack )
 {
     int i;
-    printf("(Stack base)\t");
+    printf("Show in number: (Stack base)\t");
     if( stack == NULL || stack->top == Empty )
         printf("NULL\t");
     else for( i = 0; i <= stack->top; i++ )
@@ -66,13 +68,28 @@ Status print_stack_num( Stack *stack )
 Status print_stack_char( Stack *stack )
 {
     int i;
-    printf("(Stack base)\t");
+    printf("Show in char: (Stack base)\t");
     if( stack == NULL || stack->top == Empty )
         printf("NULL\t");
-    else for( i = 0; i < stack->top; i++ )
+    else for( i = 0; i <= stack->top; i++ )
         printf("%c\t", (char)stack->base[i]); 
     printf("(Stack top)\n");
     return OK;
+}
+
+int stack_top( Stack *stack )
+{
+	if( stack->top > -1 )
+		return (int)stack->base[ stack->top ];
+	else
+		//printf("stack_top %d error: empty!\n", stack->top);
+		return -1;
+}
+
+Status reset_stack( Stack *stack )
+{
+	stack->top = Empty;
+	return OK;
 }
 
 /*
