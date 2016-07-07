@@ -68,7 +68,7 @@ Status print_stack_num( Stack *stack )
 Status print_stack_char( Stack *stack )
 {
     int i;
-    printf("Show in char: (Stack base)\t");
+    printf("Show in char:   (Stack base)\t");
     if( stack == NULL || stack->top == Empty )
         printf("NULL\t");
     else for( i = 0; i <= stack->top; i++ )
@@ -92,6 +92,13 @@ Status reset_stack( Stack *stack )
 	return OK;
 }
 
+Status stack_is_empty( Stack *stack )
+{
+	if( stack->top == Empty )
+		return OK;
+	else
+		return Error;
+}
 /*
 int main()
 {

@@ -43,31 +43,36 @@ int deal_char( Stack *operation, Stack *number, int type )
 {
 	float op;
 	float number1, number2;
-	float reslut;
+	float result;
 	int flag;
 	int top;
 	//printf("%d\n", operation->top);
 	if( (top = stack_top( operation )) == -1 )
-		return -1;
+		return -1;                  //表达式错误，格式不规范
 	if( !(flag = compare( top, type )) )
-		return -2;
+		return -2;                  //未定义预算符，type
 
 	switch( flag ){
 		case '<':
 			push( operation, type);
-			return 1;
+			return 1;           //操作成功
 			break;
 		case '>':
 			pop( operation, &op );
-			pop( number, &number2 );
-			pop( number, &number1 );
-			push( number, operate( number1, (int)op, number2 ) );
-			deal_char( operation, number, type );
-			return 1;
+			if( pop( number, &number2 ) == Empty || pop( number, &number1 ) == Empty )
+				return -1;
+			result = operate( number1, (int)op, number2 );
+			if( result != 9999 ){
+				push( number, result );
+				return 2;    //需要继续调用该函数
+			}else{
+			//deal_char( operation, number, type );
+				return -3;    //操作失败。例如除数不能为0
+			}
 			break;
 		case '=':
 			pop( operation, &op );
-			return 1;
+			return 1;           //操作成功
 			break;
 		default:
 			return 0;
@@ -85,11 +90,11 @@ float operate( double number1, int op, double number2 )
 				return number1 / number2;
 			  else{
 				printf("Operating error: 除数不能为0！\n");
-				return 99.9999;
+				return 9999;
 			  }
 		default:
 			printf("Operating error: undefined operation!\n");
-				return 99.9999;
+				return 9999;
 	}
 }
 
@@ -121,6 +126,12 @@ int compare( char op1, char op2 )
 	return table[i][j];
 }
 
+void clean_buffer()
+{
+	int c;
+	while ( ( c = getchar() ) != '\n' && c != EOF );
+}
+
 int main()
 {
 	int type;
@@ -129,6 +140,7 @@ int main()
 	char s[BUFSIZE];
 	int loop = 1;
 	int flag;
+	int result;
 
 	Stack * operation = create_stack( 100 );
 	Stack * number    = create_stack( 100 ); 
@@ -136,9 +148,11 @@ int main()
 	while( loop ){
 		flag = 1;
 		push( operation, '=' );
+		printf(">>>");
 		while ( ( type = getop(s, flag ) ) != EOF ){
-                        print_stack_char( operation );
-                        print_stack_num( number );			
+                        //print_stack_char( operation );
+                        //print_stack_num( number );
+			//printf("\n");
 			switch (type){
 			case NUMBER: 
 				push( number, atof(s) );
@@ -147,16 +161,40 @@ int main()
 				break;
 			case '\n':
 			//case '=' :
-				pop( number, &op );
-				printf("%f\n", op );
+				if( stack_is_empty( operation ) ){
+					pop( number, &op );
+					printf("%f\n\n", op );
+					printf(">>>");
+				}else{
+					printf("Error: 表达式不规范！\n\n");
+					printf(">>>");
+				}
 				push( operation, '=' );
 				flag = 1;
 				break;
 			default:
 				//printf("\t%c\t", type);
-				deal_char( operation, number, type );
-				flag = 1;
-				break;
+				while( (result = deal_char( operation, number, type )) == 2 )
+					;
+				if( result == 1 ){
+					flag = 1;
+					break;
+				}else{ 
+					if( result == 0)
+						printf("compare error:括号匹配失败!\n\n");
+					else if( result == -1 )
+						printf("表达式格式不规范！\n\n");
+					else if( result == -2 )
+						printf("%c 为未定义的运算！\n\n", type);
+					else if( result == -3 )
+						printf("运算失败，除数不能为0！\n\n");
+					clean_buffer();
+					reset_stack( operation );
+					reset_stack( number );
+					push( operation, '=' );
+					flag = 1;
+					printf(">>>");
+				}
 			}
 		}
 	}

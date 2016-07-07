@@ -40,5 +40,5 @@ Status print_stack_num( Stack *stack );
 Status print_stack_char( Stack *stack );
 int stack_top( Stack *stack );
 Status reset_stack( Stack *stack );
-
+Status stack_is_empty( Stack *stack );
 #endif
