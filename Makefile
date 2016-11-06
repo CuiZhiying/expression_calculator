@@ -1,5 +1,5 @@
 expression: expression_value.o my_stack.o getop.o
-	gcc expression_value.o my_stack.o getop.o -o expression
+	gcc expression_value.o my_stack.o getop.o -o expression -lm
 
 expression_value.o: expression_value.c getop.h my_stack.h def.h
 	gcc -c expression_value.c

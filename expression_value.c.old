@@ -18,7 +18,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include "my_stack.h"
 #include "getop.h"
 #include "def.h"
@@ -28,17 +27,16 @@ float operate( double number1, int op, double number2 );
 int deal_char( Stack *operation, Stack *number, int type );
 int compare( char op1, char op2 );
 
-char table[][8] = 
+char table[][7] = 
 {
 	/*运算符之间的优先级制作成一张表格*/  
-        {'>','>','<','<','<','>','>','<'},  
-        {'>','>','<','<','<','>','>','<'},  
-        {'>','>','>','>','<','>','>','<'},  
-        {'>','>','>','>','<','>','>','<'},  
-        {'<','<','<','<','<','=','0','<'},  
-        {'>','>','>','>','0','>','>','>'},  
-        {'<','<','<','<','<','0','=','<'},
-	{'>','>','>','>','<','>','>','<'} 
+        {'>','>','<','<','<','>','>'},  
+        {'>','>','<','<','<','>','>'},  
+        {'>','>','>','>','<','>','>'},  
+        {'>','>','>','>','<','>','>'},  
+        {'<','<','<','<','<','=','0'},  
+        {'>','>','>','>','0','>','>'},  
+        {'<','<','<','<','<','0','='} 
 };
 
 int deal_char( Stack *operation, Stack *number, int type )
@@ -94,7 +92,6 @@ float operate( double number1, int op, double number2 )
 				printf("Operating error: 除数不能为0！\n");
 				return 9999;
 			  }
-		case '^': return pow(number1, number2);
 		default:
 			printf("Operating error: undefined operation!\n");
 				return 9999;
@@ -112,7 +109,6 @@ int compare( char op1, char op2 )
 		case '(': i = 4; break;
 		case ')': i = 5; break;
 		case '=': i = 6; break;
-		case '^': i = 7; break;
 		default:
 			return 0;
 	}
@@ -124,7 +120,6 @@ int compare( char op1, char op2 )
                 case '(': j = 4; break;
                 case ')': j = 5; break;
                 case '=': j = 6; break;
-		case '^': j = 7; break;
 		default:
 			return 0;
 	}
@@ -153,11 +148,11 @@ int main()
 	while( loop ){
 		flag = 1;
 		push( operation, '=' );
-		printf(">>> ");
+		printf(">>>");
 		while ( ( type = getop(s, flag ) ) != EOF ){
-                        //print_stack_char( operation );
-                        //print_stack_num( number );
-			//printf("\n");
+                        print_stack_char( operation );
+                        print_stack_num( number );
+			printf("\n");
 			switch (type){
 			case NUMBER: 
 				push( number, atof(s) );
@@ -169,10 +164,10 @@ int main()
 				if( stack_is_empty( operation ) ){
 					pop( number, &op );
 					printf("%f\n\n", op );
-					printf(">>> ");
+					printf(">>>");
 				}else{
 					printf("Error: 表达式不规范！\n\n");
-					printf(">>> ");
+					printf(">>>");
 				}
 				push( operation, '=' );
 				flag = 1;
@@ -198,7 +193,7 @@ int main()
 					reset_stack( number );
 					push( operation, '=' );
 					flag = 1;
-					printf(">>> ");
+					printf(">>>");
 				}
 			}
 		}
